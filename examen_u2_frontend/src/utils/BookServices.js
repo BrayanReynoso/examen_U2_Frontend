@@ -38,7 +38,7 @@ const getBooksByPublication = async () => {
         throw error;
     }
 }
-const save = async (book) => {
+const save = async (book, selectedImage) => {
     try {
         const response = await fetch(API_URL, {
             method:"POST",
@@ -49,6 +49,7 @@ const save = async (book) => {
                 name: book.name,
                 author: book.author,
                 publication: book.publication,
+                images: selectedImage
             })
         });
         if(response.ok){

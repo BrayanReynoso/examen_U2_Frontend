@@ -62,6 +62,21 @@ import CarouselComponent from "./components/CarouselComponent.vue";
 
     <!-- Modal para agregar libro -->
     <b-modal v-model="showModal" title="Agregar Libro" @hidden="resetForm">
+      <b-card-text>
+    <div class="img-container">
+      <img
+        style="object-fit: cover; height: 100%"
+        class="d-block w-100"
+        :src="book.images[0].url"
+        alt="Image"
+      />
+      <strong>Nombre:</strong> {{ book.name }} <br />
+      <strong>Autor:</strong> {{ book.author }} <br />
+      <strong>publication:</strong> {{ book.publication }}<br />
+    </div>
+  </b-card-text>
+    </b-card>
+    <b-modal v-model="showModal" title="Agregar Libro" @Hidden="resetForm">
       <b-form @submit.prevent="addBook">
         <b-form-group label="Nombre:" label-for="name">
           <b-form-input v-model="newBook.name" id="name" required></b-form-input>
@@ -72,6 +87,9 @@ import CarouselComponent from "./components/CarouselComponent.vue";
         <b-form-group label="Fecha publicación:" label-for="publication">
           <b-form-input v-model="newBook.publication" id="publication" required></b-form-input>
         </b-form-group>
+        <div>
+          <input type="file" accept="image/*" @change="handleFileInputChange"  />
+        </div>
         <b-button type="submit" variant="success">Guardar</b-button>
       </b-form>
     </b-modal>
@@ -92,6 +110,7 @@ export default {
         author: "",
         publication: "",
       },
+      imageObjects: [],
       newBook: {
         name: "",
         author: "",
@@ -104,6 +123,25 @@ export default {
     this.getBooks();
   },
   methods: {
+    handleFileInputChange(event) {
+      const files = event.target.files;
+      if (files.length > 0) {
+        const newImages = Array.from(files).map((file) => {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const base64String = reader.result.split(',')[1];
+              resolve({ mimeType: file.type, fileBase64: base64String });
+            };
+            reader.readAsDataURL(file);
+          });
+        });
+
+        Promise.all(newImages).then((results) => {
+          this.imageObjects = [...this.imageObjects, ...results];
+        });
+      }
+    },
     async getBooks() {
       this.books = [];
       try {
@@ -139,9 +177,10 @@ export default {
         console.log("error getbooks");
       }
     },
+
     async addBook() {
       try {
-        const response = await BookServices.save(this.newBook);
+        const response = await BookServices.save(this.newBook, this.imageObjects);
         this.showModal = false;
         this.resetForm();
         await this.getBooks();
