@@ -1,10 +1,25 @@
 <script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import CarouselComponent from "./components/CarouselComponent.vue";
+
+const isScrolling = ref(false);
+const handleScroll = () => {
+  const scrollThreshold = 50;
+  const currentScroll = window.scrollY;
+  isScrolling.value = currentScroll > scrollThreshold;
+};
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
   <div id="container" class="text-center">
-    <CarouselComponent />
+    <CarouselComponent v-if="!isScrolling" />
+
     <div class="d-flex">
       <div class="left-panel">
         <div class="mt-4">
@@ -105,7 +120,9 @@ export default {
   created() {
     this.getBooks();
   },
+  
   methods: {
+    
     handleFileInputChange(event) {
       const files = event.target.files;
       if (files.length > 0) {
@@ -238,5 +255,8 @@ export default {
 
 .edit-drop {
   background-color: yellow;
+}
+.scroll-hide {
+  display: none;
 }
 </style>
