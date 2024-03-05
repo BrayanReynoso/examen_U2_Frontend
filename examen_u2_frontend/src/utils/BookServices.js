@@ -6,16 +6,16 @@ const getBooks = async () => {
     try {
         const response = await axios.get(API_URL);
         console.log(response.data);
-        return response.data;
+        return response.data.data;
     } catch (error){
         throw error;
     }
 }
-const getBooksByAuthor = async (author) => {
+const getBooksByAuthor = async () => {
     try {
-        const response = await axios.get(API_URL + 'author/' + author);
+        const response = await axios.get(API_URL + 'author/');
         console.log(response.data);
-        return response.data;
+        return response.data.data;
     } catch (error){
         throw error;
     }
@@ -24,7 +24,16 @@ const getBooksByName = async (name) => {
     try {
         const response = await axios.get(API_URL + 'name/' + name);
         console.log(response.data);
-        return response.data;
+        return response.data.data;
+    } catch (error){
+        throw error;
+    }
+}
+const getBooksByPublication = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/api-book/publication/');
+        console.log(response.data);
+        return response.data.data;
     } catch (error){
         throw error;
     }
@@ -85,6 +94,7 @@ export default {
     save,
     getBooksByAuthor,
     getBooksByName,
+    getBooksByPublication,
     deleteBook,
     update
 }
