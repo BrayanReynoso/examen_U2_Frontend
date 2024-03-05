@@ -14,18 +14,20 @@ import CarouselComponent from "./components/CarouselComponent.vue";
           <b-button @click="handleClick('Mostrar si tiene imagen')">Mostrar si tiene imagen</b-button>
         </div>
         <b-button variant="primary" @click="showModal = true" class="mt-3 mb-2">Agregar</b-button>
+
         <b-card v-for="book in books" :key="book.id" class="movie-card m-3" draggable
           @dragstart="onDragStart($event, book)">
           <div class="d-flex justify-content-between align-items-center">
             <b-card-title>{{ book.name }}</b-card-title>
-            <b-button variant="danger-outline" size="sm" @click="deleteBook(book.id)">
-              <b-icon icon="x-circle" scale="1" variant="danger"></b-icon>
-            </b-button>
           </div>
           <b-card-text>
-            <strong>Nombre:</strong> {{ book.name }} <br />
-            <strong>Autor:</strong> {{ book.author }} <br />
-            <strong>Publicación:</strong> {{ book.publication }}<br />
+            <div class="img-container">
+              <img style="object-fit: cover; height: 100%" class="d-block w-100" :src="book.images[0].url"
+                alt="Image" />
+              <strong>Nombre:</strong> {{ book.name }} <br />
+              <strong>Autor:</strong> {{ book.author }} <br />
+              <strong>publication:</strong> {{ book.publication }}<br />
+            </div>
           </b-card-text>
         </b-card>
       </div>
@@ -59,23 +61,6 @@ import CarouselComponent from "./components/CarouselComponent.vue";
         <b-button type="submit" variant="success">Actualizar</b-button>
       </b-form>
     </b-modal>
-
-    <!-- Modal para agregar libro -->
-    <b-modal v-model="showModal" title="Agregar Libro" @hidden="resetForm">
-      <b-card-text>
-    <div class="img-container">
-      <img
-        style="object-fit: cover; height: 100%"
-        class="d-block w-100"
-        :src="book.images[0].url"
-        alt="Image"
-      />
-      <strong>Nombre:</strong> {{ book.name }} <br />
-      <strong>Autor:</strong> {{ book.author }} <br />
-      <strong>publication:</strong> {{ book.publication }}<br />
-    </div>
-  </b-card-text>
-    </b-card>
     <b-modal v-model="showModal" title="Agregar Libro" @Hidden="resetForm">
       <b-form @submit.prevent="addBook">
         <b-form-group label="Nombre:" label-for="name">
@@ -88,7 +73,7 @@ import CarouselComponent from "./components/CarouselComponent.vue";
           <b-form-input v-model="newBook.publication" id="publication" required></b-form-input>
         </b-form-group>
         <div>
-          <input type="file" accept="image/*" @change="handleFileInputChange"  />
+          <input type="file" accept="image/*" @change="handleFileInputChange" />
         </div>
         <b-button type="submit" variant="success">Guardar</b-button>
       </b-form>
