@@ -32,17 +32,15 @@ import CarouselComponent from "./components/CarouselComponent.vue";
         </b-card>
       </div>
 
-      <div class="right-panel">
-        <!-- drop para eliminar -->
-        <div style="background-color: brown;" class="drag-box" @dragover.prevent @drop="onDropDelete($event)"
-          :class="{ 'delete-drop': action === 'eliminar' }">
-          Eliminar
-        </div>
-        <!-- drop para editar -->
-        <div style="background-color:yellow;" class="drag-box" @dragover.prevent @drop="onDropEdit($event)"
-          :class="{ 'edit-drop': action === 'editar' }">
-          Editar
-        </div>
+      <!-- Cuadro de drop para eliminar -->
+      <div style="background-color: brown; position: fixed; left: calc(100% - 220px); top: 0;" class="drag-box" @dragover.prevent @drop="onDropDelete($event)"
+        :class="{ 'delete-drop': action === 'eliminar' }">
+        Eliminar
+      </div>
+      <!-- Cuadro de drop para editar -->
+      <div style="background-color: yellow; position: fixed; left: calc(100% - 220px); bottom: 0;" class="drag-box" @dragover.prevent @drop="onDropEdit($event)"
+        :class="{ 'edit-drop': action === 'editar' }">
+        Editar
       </div>
     </div>
 
@@ -223,7 +221,7 @@ export default {
 }
 
 .drag-box {
-  width: 100%;
+  width: 200px;
   height: 200px;
   background-color: lightgray;
   border: 1px solid gray;
@@ -241,6 +239,4 @@ export default {
 .edit-drop {
   background-color: yellow;
 }
-</style>
-
 </style>
